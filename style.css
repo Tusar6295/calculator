@@ -12,6 +12,11 @@ html{
     font-weight: bold;
 }
 
+.header{
+    padding: 16px;
+    color: white;
+    text-align: right;
+}
 
 .main{
     width: 300px;
@@ -60,6 +65,11 @@ button:hover{
     color: black;
     box-shadow: 0px 10px 20px 5px rgba(0, 0, 0, 0.5);
     transform: translateY(-5px);
+}
+
+button:active{
+    transition-duration: 0.1ms;
+    background-color: #1a1a1b;
 }
 #equals{
     width: 124px;
