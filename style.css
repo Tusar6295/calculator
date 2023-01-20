@@ -13,9 +13,12 @@ html{
 }
 
 .header{
+    display: flex;
+    flex-direction: column;
     padding: 16px;
     color: white;
     text-align: right;
+    gap:20px;
 }
 
 .main{
@@ -64,7 +67,6 @@ button:hover{
     background-color: #b8b8c4;
     color: black;
     box-shadow: 0px 10px 20px 5px rgba(0, 0, 0, 0.5);
-    transform: translateY(-5px);
 }
 
 button:active{

@@ -1,7 +1,7 @@
 const display = document.querySelector('#display');
 const allclear = document.querySelector('#clear');
 const del = document.querySelector('#delete');
-const percent = document.querySelector('#percent');
+const modulus = document.querySelector('#modulus');
 const divide = document.querySelector('#divide');
 const seven = document.querySelector('#seven');
 const eight = document.querySelector('#eight');
@@ -18,7 +18,7 @@ const multiply = document.querySelector('#multiply');
 const zero = document.querySelector('#zero');
 const dot = document.querySelector('#dot');
 const equals = document.querySelector('#equals');
-
+const displayResult = document.querySelector('#answer')
 
 one.addEventListener('click', addOne);
 two.addEventListener('click', addTwo);
@@ -34,7 +34,7 @@ allclear.addEventListener('click', clearDisplay);
 del.addEventListener('click', deleteDisplay);
 divide.addEventListener('click', division);
 multiply.addEventListener('click', multiplication);
-percent.addEventListener('click', percentage);
+modulus.addEventListener('click', modulo);
 sum.addEventListener('click', plus);
 sub.addEventListener('click', subtract);
 dot.addEventListener('click', addDot);
@@ -48,25 +48,12 @@ let operator = '';
 let tempOperator = '';
 let operatorCount = 0;
 
-function compute() {
-    if (operatorCount == 1) {
-        num1 = temp;
-        temp = 0;
-        operator = tempOperator;
-    }
-    else if (operatorCount > 1) {
-        num2 = temp;
-        temp = 0;
-        result = operate();
-        num1 = result;
-        operator = tempOperator;
-    }
-}
-
+//store number in temporary variable
 function storeNum(a) {
     temp = temp * 10 + a;
 }
 
+//number functions 
 function addOne() {
     display.textContent += "1";
     storeNum(1);
@@ -118,6 +105,7 @@ function addZero() {
     storeNum(0);
 }
 
+//operator functions
 function multiplication() {
     display.textContent += " x ";
     operatorCount++;
@@ -146,8 +134,11 @@ function subtract() {
     compute();
 }
 
-function percentage() {
+function modulo() {
     display.textContent += " % ";
+    operatorCount++;
+    tempOperator = '%';
+    compute();
 }
 
 function addDot() {
@@ -158,11 +149,13 @@ function equalTo() {
     display.textContent += " = ";
     num2 = temp;
     result = operate();
-    console.log(result);
+    displayResult.textContent = result;
 }
 
+//clear and delete functions
 function clearDisplay() {
     display.textContent = "";
+    displayResult.textContent = "";
     temp = 0;
     num1 = 0;
     num2 = 0;
@@ -173,19 +166,45 @@ function clearDisplay() {
 }
 
 function deleteDisplay() {
+    //for display
     let str = display.textContent;
+    let tempStr = str;
     if (str[str.length - 1] == " ") {
         str = str.slice(0, str.length - 3)
     }
     else { str = str.slice(0, -1); }
 
     display.textContent = str;
+    
+    //actual logic
+    if(Number.isInteger(parseInt(tempStr[tempStr.length-1])))
+    {
+        temp = Math.floor(temp / 10) ;
+
+    }
+    else{
+        tempOperator = '';
+    }
 }
 
+//function to compute result based on the operator count
+function compute() {
+    if (operatorCount == 1) {
+        num1 = temp;
+        temp = 0;
+        operator = tempOperator;
+    }
+    else if (operatorCount > 1) {
+        num2 = temp;
+        temp = 0;
+        result = operate();
+        num1 = result;
+        operator = tempOperator;
+    }
+}
+
+//operation
 function operate() {
-    console.log(num1)
-    console.log(num2)
-    console.log(operator)
     if (operator === "+") {
         return num1 + num2;
     }
