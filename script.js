@@ -38,14 +38,19 @@ function store(a) {
 //function to compute result based on the operator count
 function compute() {
     if (operatorCount == 1) {
+        equals.addEventListener('click', populateDisplay)
         num1 = temp;
         temp = 0;
         operator = tempOperator;
     }
-    else if (operatorCount > 1) {
-        equals.addEventListener('click', populateDisplay)
+    else if (operatorCount > 1) { 
         num2 = temp;
         temp = 0;
+        if(operator === '/' && num2 === 0)
+        {
+            displayResult.textContent = "Don't commit this crime";
+            return;
+        }
         result = operate();
         num1 = result;
         operator = tempOperator;
