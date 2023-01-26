@@ -53,7 +53,7 @@ html{
     gap: 10px;
 }
 
-.btn{
+button{
     width: 57px;
     height: 55px;
     border-radius: 8px;
