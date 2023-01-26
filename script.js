@@ -2,8 +2,9 @@ const section = document.querySelector('.section')
 const display = document.querySelector('#display');
 const displayResult = document.querySelector('#answer')
 const buttons = document.querySelectorAll('.number,.operator,.dot');
-const allClear = document.querySelector('.clear')
-const del = document.querySelector('.delete')
+const allClear = document.querySelector('.clear');
+const del = document.querySelector('.delete');
+const equals = document.querySelector('.equals');
 
 let temp = 0;
 let num1 = null;
@@ -13,6 +14,7 @@ let result = null;
 let tempOperator = null;
 let operatorCount = 0;
 isEqualPressed = false; 
+let flag = 0;
 
 //event listeners for numbers and operators
 buttons.forEach(button => {
@@ -25,6 +27,11 @@ allClear.addEventListener('click', clearDisplay);
 
 
 function store(a) {
+    //user cannot enter a number greater than 9 digits
+    if(temp.toString().length == 9)
+    {
+        return 1;
+    }
     temp = temp * 10 + a;
 }
 
@@ -36,6 +43,7 @@ function compute() {
         operator = tempOperator;
     }
     else if (operatorCount > 1) {
+        equals.addEventListener('click', populateDisplay)
         num2 = temp;
         temp = 0;
         result = operate();
@@ -63,16 +71,32 @@ function populateDisplay(e){
 
     let content = e.target.textContent;
 
+    //to stop user from entering equals before a operator
+    if(content === '=' && operatorCount === 0)
+    {
+        return;
+    }
+
     if(checkSpecialChars(content))
     {
+        //flag variable to restrict consecutive operator entries
+        if(flag == 1 ){
+            return;
+        }
         display.textContent += ' ' + content + ' ';
         tempOperator = content;
         operatorCount++;
         compute();
+        flag = 1;
     }
     else {
+        let lengthCheck = store(parseInt(content));
+        if(lengthCheck === 1)
+        {
+            return;
+        }
         display.textContent += content;
-        store(parseInt(content));
+        flag = 0;
     }
     
     if(content === "=")
