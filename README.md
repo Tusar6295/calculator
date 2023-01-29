@@ -1,5 +1,5 @@
 # calculator
-A basic calculator built using HTML,CSS and Javascript.[Check it out](https://tusar6295.github.io/calculator)      
+A basic calculator built using HTML,CSS and Javascript.  [Check it out](https://tusar6295.github.io/calculator)      
 
 **Features:**   
 ------------
