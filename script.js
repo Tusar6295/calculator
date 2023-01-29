@@ -6,7 +6,7 @@ const allClear = document.querySelector('.clear');
 const del = document.querySelector('.delete');
 const equals = document.querySelector('.equals');
 
-let temp = 0;
+let temp = '';
 let num1 = null;
 let num2 = null;
 let operator = null;
@@ -15,6 +15,7 @@ let tempOperator = null;
 let operatorCount = 0;
 isEqualPressed = false; 
 let flag = 0;
+let decimalCount = 0;
 
 //event listeners for numbers and operators
 buttons.forEach(button => {
@@ -28,24 +29,35 @@ allClear.addEventListener('click', clearDisplay);
 
 function store(a) {
     //user cannot enter a number greater than 9 digits
-    if(temp.toString().length == 9)
+    if(temp.length == 9)
     {
         return 1;
     }
-    temp = temp * 10 + a;
+
+    if(a == '.')
+    {
+        decimalCount++;
+    }
+
+    //restricting more than one decimal in a number
+    if(decimalCount > 1)
+    {
+        return 1;
+    }
+    temp += a;
 }
 
 //function to compute result based on the operator count
 function compute() {
     if (operatorCount == 1) {
         equals.addEventListener('click', populateDisplay)
-        num1 = temp;
-        temp = 0;
+        num1 = parseFloat(temp);
+        temp = '';
         operator = tempOperator;
     }
     else if (operatorCount > 1) { 
-        num2 = temp;
-        temp = 0;
+        num2 = parseFloat(temp);
+        temp = '';
         if(operator === '/' && num2 === 0)
         {
             displayResult.textContent = "Don't commit this crime";
@@ -53,6 +65,12 @@ function compute() {
         }
         result = operate();
         num1 = result;
+
+        //rounds the result to 5 decimal places
+        if(result.toString().includes('.')){
+            result = Math.round(result * 100000) / 100000;
+        }
+
         operator = tempOperator;
         displayResult.textContent = result;
     }
@@ -85,9 +103,10 @@ function populateDisplay(e){
     if(checkSpecialChars(content))
     {
         //flag variable to restrict consecutive operator entries
-        if(flag == 1 ){
+        if(flag == 1 || temp === ''){
             return;
         }
+        decimalCount = 0;
         display.textContent += ' ' + content + ' ';
         tempOperator = content;
         operatorCount++;
@@ -95,8 +114,8 @@ function populateDisplay(e){
         flag = 1;
     }
     else {
-        let lengthCheck = store(parseInt(content));
-        if(lengthCheck === 1)
+        let lengthCheck = store(content);
+        if(lengthCheck === 1) //also stops more than one decimal in a number from displaying
         {
             return;
         }
