@@ -13,13 +13,13 @@ let operator = null;
 let result = null;
 let tempOperator = null;
 let operatorCount = 0;
-isEqualPressed = false; 
+let isEqualPressed = false; 
 let flag = 0;
 let decimalCount = 0;
 
 //event listeners for numbers and operators
 buttons.forEach(button => {
-    button.addEventListener('click', populateDisplay)
+    button.addEventListener('click', populateDisplay);
 })
 
 //separate event listeners for delete and clear buttons
@@ -103,7 +103,7 @@ function populateDisplay(e){
     if(checkSpecialChars(content))
     {
         //flag variable to restrict consecutive operator entries
-        if(flag == 1 || temp === ''){
+        if(flag == 1){
             return;
         }
         decimalCount = 0;
@@ -168,11 +168,11 @@ function deleteDisplay() {
         clearDisplay();
         isEqualPressed = false;
     }
-    //deleting display (only one input)
+    //deleting display (only one input) cannot delete operators
     let str = display.textContent;
     let tempStr = str;
     if (str[str.length - 1] == " ") {
-        str = str.slice(0, str.length - 3)
+        return;
     }
     else { str = str.slice(0, -1); }
 
@@ -184,8 +184,34 @@ function deleteDisplay() {
         temp = Math.floor(temp / 10) ;
 
     }
-    else{
-        tempOperator = '';
-    }
 }
 
+//keyboard control
+
+document.addEventListener('keydown', keyboard)
+
+function keyboard(e){
+    const operators = {
+        '+' : 'plus',
+        '-' : 'minus',
+        '*' : 'multiply',
+        '/' : 'divide',
+        '%' : 'modulus',
+        }
+
+    const KEY = e.key;
+    if(KEY === 'Backspace'){
+        document.getElementById('delete').click();
+    }
+    else if(KEY === 'Delete' || KEY === 'c' || KEY === 'C'){
+        document.getElementById('clear').click();
+    }else if(KEY === '='|| KEY === 'Enter'){
+        document.getElementById('equals').click();
+    }else if(KEY === '.'){
+        document.getElementById('dot').click();
+    }else if(['*','%','/','+','-'].includes(KEY)){
+        document.getElementById(operators[KEY]).click();
+    }else if(!Number.isNaN(KEY)){
+        document.getElementById(`${KEY}`).click();
+    }
+}
